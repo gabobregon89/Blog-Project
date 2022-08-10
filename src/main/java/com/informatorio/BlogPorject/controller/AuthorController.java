@@ -13,50 +13,52 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.informatorio.BlogPorject.converter.AuthorConverter;
 import com.informatorio.BlogPorject.dto.AuthorDTO;
-import com.informatorio.BlogPorject.entity.AuthorEntity;
-import com.informatorio.BlogPorject.repository.AuthorRepository;
+import com.informatorio.BlogPorject.service.AuthorService;
 
 @RestController
 public class AuthorController {
     
-    private AuthorConverter authorConverter;
-    private AuthorRepository authorRepository;
+    private AuthorService authorService;
 
     @Autowired
-    public AuthorController(AuthorConverter authorConverter, AuthorRepository authorRepository) {
-        this.authorConverter = authorConverter;
-        this.authorRepository = authorRepository;
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
     }
 
     @PostMapping("/author")
     public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO authorDTO) {
-        AuthorEntity authorEntity = authorConverter.authorDTOToEntity(authorDTO);
-        authorEntity = authorRepository.save(authorEntity);
-        return new ResponseEntity<AuthorDTO>(authorConverter.authorEntityToDTO(authorEntity), HttpStatus.CREATED);
+        return new ResponseEntity<AuthorDTO>(authorService.newAuthor(authorDTO),
+                                            HttpStatus.CREATED);
     }
 
     @GetMapping("/author")
     public ResponseEntity<List<AuthorDTO>> getAll() {
-        List<AuthorEntity> entities = authorRepository.findAll();
-        return new ResponseEntity<List<AuthorDTO>>(authorConverter.toListDTO(entities),HttpStatus.OK);
+        return new ResponseEntity<List<AuthorDTO>>(authorService.getAuthors(),
+                                                HttpStatus.OK);
+    }
+
+    @GetMapping("/author/{some}")
+    public ResponseEntity<List<AuthorDTO>> getBySomeWord(@PathVariable String some) {
+        return new ResponseEntity<List<AuthorDTO>>(authorService.findBySomeWord(some),
+                                                HttpStatus.OK);
+    }
+
+    @GetMapping("/authordate/{date}")
+    public ResponseEntity<List<AuthorDTO>> getByDate(@PathVariable String date) {
+        return new ResponseEntity<List<AuthorDTO>>(authorService.compareByDate(date),
+                                                HttpStatus.OK);
     }
 
     @PutMapping("/author/{id}")
     public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable Long id, @RequestBody AuthorDTO authorDTO) {
-        AuthorEntity entity = authorRepository.findById(id).orElse(null);
-        entity.setFirstName(authorDTO.getFirstName());
-        entity.setLastName(authorDTO.getLastName());
-        entity.setFullName(authorDTO.getFullName());
-        entity.setCreatedAt(authorDTO.getCreatedAt());
-        entity = authorRepository.save(entity);
-        return new ResponseEntity<AuthorDTO>(authorConverter.authorEntityToDTO(entity), HttpStatus.OK);
+        return new ResponseEntity<AuthorDTO>(authorService.modifyAuthor(id, authorDTO),
+                                            HttpStatus.OK);
     }
 
     @DeleteMapping("/author/{id}")
     public ResponseEntity<String> deleteAuthor(@PathVariable Long id) {
-        authorRepository.deleteById(id);
-        return new ResponseEntity<String>("El autor se borro correctamente", HttpStatus.OK);
+        return new ResponseEntity<String>(authorService.deleteAnAuthor(id),
+                                        HttpStatus.OK);
     }
 }
