@@ -1,6 +1,7 @@
 package com.informatorio.BlogPorject.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class SourceDTO {
@@ -9,6 +10,8 @@ public class SourceDTO {
     private String name;
     private String code;
     private LocalDate createdAt;
+    private List<ArticleDTO> articles;
+    
 
     //Constructors
     public SourceDTO() {}
