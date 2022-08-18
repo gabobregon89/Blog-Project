@@ -8,15 +8,19 @@ import org.springframework.stereotype.Component;
 
 import com.informatorio.BlogPorject.dto.ArticleDTO;
 import com.informatorio.BlogPorject.entity.ArticleEntity;
+import com.informatorio.BlogPorject.entity.SourceEntity;
+import com.informatorio.BlogPorject.repository.SourceRepository;
 
 @Component
 public class ArticleConverter {
 
     private SourceConverter sourceConverter;
+    private SourceRepository sourceRepository;
 
     @Autowired
-    public ArticleConverter(SourceConverter sourceConverter) {
+    public ArticleConverter(SourceConverter sourceConverter, SourceRepository sourceRepository) {
         this.sourceConverter = sourceConverter;
+        this.sourceRepository = sourceRepository;
     }
     
     public ArticleDTO articleEntityToDTO(ArticleEntity article) {
@@ -31,13 +35,14 @@ public class ArticleConverter {
     }
 
     public ArticleEntity articleDTOToEntity(ArticleDTO dto) {
+        SourceEntity source = sourceRepository.findById(dto.getSourceDTO().getId()).orElse(null);                      
         return new ArticleEntity(dto.getTitle(),
                                 dto.getDescription(),
                                 dto.getUrl(),
                                 dto.getUrlToImage(),
                                 dto.getPublishedAt(),
                                 dto.getContent(),
-                                sourceConverter.sourceDTOToEntity(dto.getSource()));
+                                source);
     }
 
     public List<ArticleDTO> toListDTO(List<ArticleEntity> articles) {

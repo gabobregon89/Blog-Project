@@ -1,6 +1,7 @@
 package com.informatorio.BlogPorject.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,6 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+/*import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;*/ 
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,8 +27,9 @@ public class SourceEntity {
     private String code;
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "source", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ArticleEntity> articles;
+    //@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "source", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<ArticleEntity> articles = new ArrayList<>();
 
     //Constructors
     public SourceEntity() {}
@@ -32,7 +37,7 @@ public class SourceEntity {
     public SourceEntity(String name, LocalDate createdAt) {
         this.name = name;
         setCode(code);
-        this.createdAt = createdAt;
+        this.createdAt = createdAt;;
     }
 
     //Getters y Setters

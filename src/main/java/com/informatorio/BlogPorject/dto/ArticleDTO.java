@@ -13,13 +13,13 @@ public class ArticleDTO {
     private LocalDate publishedAt;
     private String content;
     //private Long author;
-    private SourceDTO source; 
+    private SourceDTO sourceDTO;
 
 
     //Constructors
     public ArticleDTO() {}
 
-    public ArticleDTO(Long id, String title, String description, String url, String urlToImage, LocalDate publishedAt, String content, SourceDTO source) {
+    public ArticleDTO(Long id, String title, String description, String url, String urlToImage, LocalDate publishedAt, String content, SourceDTO sourceDTO) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -27,7 +27,7 @@ public class ArticleDTO {
         this.urlToImage = urlToImage;
         this.publishedAt = publishedAt;
         this.content = content;
-        this.source = source;
+        this.sourceDTO = sourceDTO;
     }
 
     //Getters and Setters
@@ -80,12 +80,13 @@ public class ArticleDTO {
         this.content = content;
     }
 
-    public SourceDTO getSource() {
-        return this.source;
+    public SourceDTO getSourceDTO() {
+        return this.sourceDTO;
     }
-    public void setSource(SourceDTO source) {
-        this.source = source;
+    public void setSourceDTO(SourceDTO sourceDTO) {
+        this.sourceDTO = sourceDTO;
     }
+    
 
     //Equals
     @Override
@@ -100,13 +101,13 @@ public class ArticleDTO {
         && Objects.equals(urlToImage, article.urlToImage)
         && Objects.equals(publishedAt, article.publishedAt)
         && Objects.equals(content, article.content)
-        && Objects.equals(source, article.source);
+        && Objects.equals(sourceDTO, article.sourceDTO);
     }
 
     //HashCode
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, url, urlToImage, publishedAt, content, source);
+        return Objects.hash(id, title, description, url, urlToImage, publishedAt, content, sourceDTO);
     }
 
     //ToString
@@ -120,7 +121,7 @@ public class ArticleDTO {
                 ", urlToImage='" + urlToImage + '\'' +
                 ", publishedAt='" + publishedAt + '\'' +
                 ", content='" + content + '\'' +
-                ", source='" + source +
+                ", source='" + sourceDTO.getCode() +
                 '}';
     }
 }

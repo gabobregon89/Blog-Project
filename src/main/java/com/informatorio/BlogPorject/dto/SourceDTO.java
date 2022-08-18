@@ -1,6 +1,7 @@
 package com.informatorio.BlogPorject.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ public class SourceDTO {
     private String name;
     private String code;
     private LocalDate createdAt;
-    private List<ArticleDTO> articles;
+    private List<ArticleDTO> articles = new ArrayList<>();
     
 
     //Constructors
@@ -50,6 +51,10 @@ public class SourceDTO {
     }
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<ArticleDTO> getArticles() {
+        return this.articles;
     }
 
     //Equals

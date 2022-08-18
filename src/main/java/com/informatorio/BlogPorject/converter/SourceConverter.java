@@ -10,7 +10,7 @@ import com.informatorio.BlogPorject.entity.SourceEntity;
 
 @Component
 public class SourceConverter {
-    
+
     public SourceDTO sourceEntityToDTO(SourceEntity source) {
         return new SourceDTO(source.getId(),
                             source.getName(),

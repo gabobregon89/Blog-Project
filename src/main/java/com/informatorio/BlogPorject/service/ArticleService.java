@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.informatorio.BlogPorject.converter.ArticleConverter;
+import com.informatorio.BlogPorject.converter.SourceConverter;
 import com.informatorio.BlogPorject.dto.ArticleDTO;
 import com.informatorio.BlogPorject.entity.ArticleEntity;
 import com.informatorio.BlogPorject.repository.ArticleRepository;
@@ -15,18 +16,32 @@ import com.informatorio.BlogPorject.repository.ArticleRepository;
 public class ArticleService {
     
     private ArticleRepository articleRepository;
-    private ArticleConverter articleConverter ;
+    private ArticleConverter articleConverter;
+    private SourceConverter sourceConverter;
+    //private SourceRepository sourceRepository;
 
     @Autowired
-    public ArticleService(ArticleRepository articleRepository, ArticleConverter articleConverter) {
+    public ArticleService(ArticleRepository articleRepository, ArticleConverter articleConverter, SourceConverter sourceConverter) {
         this.articleRepository = articleRepository;
         this.articleConverter = articleConverter;
+        this.sourceConverter = sourceConverter;
+        //this.sourceRepository = sourceRepository;
     }
 
     public ArticleDTO newArticle(ArticleDTO articleDTO) {
         ArticleEntity articleEntity = articleConverter.articleDTOToEntity(articleDTO);
+        /*SourceEntity source = new SourceEntity();
+        if (articleDTO.getSourceDTO() != null) {
+            try {
+                source = sourceRepository.findById(articleDTO.getSourceDTO().getId()).get();
+            } catch (Exception e) {
+                throw new NotFoundException("Not Found Source: " + articleDTO.getSourceDTO().getId());
+            }
+        }
+        source = sourceRepository.findById(articleDTO.getSourceDTO().getId()).get();*/
         articleEntity = articleRepository.save(articleEntity);
         return articleConverter.articleEntityToDTO(articleEntity);
+
     }
 
     public List<ArticleDTO> getAllArticles() {
@@ -47,18 +62,6 @@ public class ArticleService {
         return articleConverter.toListDTO(entitiesFilter);
     }
 
-    /*public List<ArticleDTO> compareByDate(String date) {
-        List<ArticleEntity> entities = authorRepository.findAll();
-        List<ArticleEntity> entitiesFilter = new ArrayList<>();
-        LocalDate fecha = LocalDate.parse(date);
-        for (ArticleEntity author : entities) {
-            if (author.getCreatedAt().compareTo(fecha) > 0) {
-                entitiesFilter.add(author);
-            }
-        }
-        return authorConverter.toListDTO(entitiesFilter);
-    }*/
-
     public ArticleDTO modifyArticle(Long id, ArticleDTO articleDTO) {
         ArticleEntity entity = articleRepository.findById(id).orElse(null);
         entity.setTitle(articleDTO.getTitle());
@@ -67,6 +70,7 @@ public class ArticleService {
         entity.setUrlToImage(articleDTO.getUrlToImage());
         entity.setPublishedAt(articleDTO.getPublishedAt());
         entity.setContent(articleDTO.getContent());
+        entity.setSource(sourceConverter.sourceDTOToEntity(articleDTO.getSourceDTO()));
         entity = articleRepository.save(entity);
         return articleConverter.articleEntityToDTO(entity);
     }

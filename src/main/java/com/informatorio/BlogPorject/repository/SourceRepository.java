@@ -8,4 +8,5 @@ import com.informatorio.BlogPorject.entity.SourceEntity;
 @Repository
 public interface SourceRepository extends JpaRepository<SourceEntity, Long>{
     
+    public SourceEntity findByName(String name);
 }

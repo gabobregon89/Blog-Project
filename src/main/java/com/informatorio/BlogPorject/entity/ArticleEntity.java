@@ -94,7 +94,7 @@ public class ArticleEntity {
     }
 
     public SourceEntity getSource() {
-        return this.source;
+        return source;
     }
     public void setSource(SourceEntity source) {
         this.source = source;
