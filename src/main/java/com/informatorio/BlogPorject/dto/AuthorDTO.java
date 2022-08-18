@@ -1,6 +1,8 @@
 package com.informatorio.BlogPorject.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class AuthorDTO {
@@ -10,6 +12,7 @@ public class AuthorDTO {
     private String lastName;
     private String fullName;
     private LocalDate createdAt;
+    private List<ArticleDTO> articles = new ArrayList<>();
 
     //Constructors
     public AuthorDTO() {}

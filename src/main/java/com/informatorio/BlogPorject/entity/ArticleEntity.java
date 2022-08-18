@@ -25,7 +25,9 @@ public class ArticleEntity {
     private String urlToImage;
     private LocalDate publishedAt;
     private String content;
-    //private Long author;
+    
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private AuthorEntity author;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private SourceEntity source;
@@ -33,13 +35,14 @@ public class ArticleEntity {
     //Constructors
     public ArticleEntity() {}
 
-    public ArticleEntity(String title, String description, String url, String urlToImage, LocalDate publishedAt, String content, SourceEntity source) {
+    public ArticleEntity(String title, String description, String url, String urlToImage, LocalDate publishedAt, String content, AuthorEntity author, SourceEntity source) {
         this.title = title;
         this.description = description;
         this.url = url;
         this.urlToImage = urlToImage;
         this.publishedAt = publishedAt;
         this.content = content;
+        this.author = author;
         this.source = source;
     }
 
@@ -93,6 +96,13 @@ public class ArticleEntity {
         this.content = content;
     }
 
+    public AuthorEntity getAuthor() {
+        return author;
+    }
+    public void setAuthor(AuthorEntity author) {
+        this.author = author;
+    }
+
     public SourceEntity getSource() {
         return source;
     }
@@ -113,13 +123,14 @@ public class ArticleEntity {
         && Objects.equals(urlToImage, article.urlToImage)
         && Objects.equals(publishedAt, article.publishedAt)
         && Objects.equals(content, article.content)
+        && Objects.equals(author, article.author)
         && Objects.equals(source, article.source);
     }
 
     //HashCode
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, url, urlToImage, publishedAt, content, source);
+        return Objects.hash(id, title, description, url, urlToImage, publishedAt, content, author, source);
     }
 
     //ToString
@@ -132,7 +143,8 @@ public class ArticleEntity {
                 ", url='" + url + '\'' +
                 ", urlToImage='" + urlToImage + '\'' +
                 ", publishedAt='" + publishedAt + '\'' +
-                ", content='" + content + '\'' +
+                ", content='" + content + '\'' + '\'' +
+                ", author='" + author + '\'' +
                 ", source='" + source +
                 '}';
     }

@@ -12,14 +12,14 @@ public class ArticleDTO {
     private String urlToImage;
     private LocalDate publishedAt;
     private String content;
-    //private Long author;
+    private AuthorDTO author;
     private SourceDTO sourceDTO;
 
 
     //Constructors
     public ArticleDTO() {}
 
-    public ArticleDTO(Long id, String title, String description, String url, String urlToImage, LocalDate publishedAt, String content, SourceDTO sourceDTO) {
+    public ArticleDTO(Long id, String title, String description, String url, String urlToImage, LocalDate publishedAt, String content, AuthorDTO author, SourceDTO sourceDTO) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -27,6 +27,7 @@ public class ArticleDTO {
         this.urlToImage = urlToImage;
         this.publishedAt = publishedAt;
         this.content = content;
+        this.author = author;
         this.sourceDTO = sourceDTO;
     }
 
@@ -80,6 +81,13 @@ public class ArticleDTO {
         this.content = content;
     }
 
+    public AuthorDTO getAuthor() {
+        return this.author;
+    }
+    public void setAuthor(AuthorDTO author) {
+        this.author = author;
+    }
+
     public SourceDTO getSourceDTO() {
         return this.sourceDTO;
     }
@@ -101,13 +109,15 @@ public class ArticleDTO {
         && Objects.equals(urlToImage, article.urlToImage)
         && Objects.equals(publishedAt, article.publishedAt)
         && Objects.equals(content, article.content)
+        && Objects.equals(author, article.author)
+        
         && Objects.equals(sourceDTO, article.sourceDTO);
     }
 
     //HashCode
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, url, urlToImage, publishedAt, content, sourceDTO);
+        return Objects.hash(id, title, description, url, urlToImage, publishedAt, content, author, sourceDTO);
     }
 
     //ToString
@@ -121,6 +131,7 @@ public class ArticleDTO {
                 ", urlToImage='" + urlToImage + '\'' +
                 ", publishedAt='" + publishedAt + '\'' +
                 ", content='" + content + '\'' +
+                ", author='" + author + '\'' +
                 ", source='" + sourceDTO.getCode() +
                 '}';
     }
