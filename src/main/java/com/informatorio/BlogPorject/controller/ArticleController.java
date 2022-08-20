@@ -2,9 +2,13 @@ package com.informatorio.BlogPorject.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.informatorio.BlogPorject.dto.ArticleDTO;
 import com.informatorio.BlogPorject.service.ArticleService;
 
+@Validated
 @RestController
 public class ArticleController {
     
@@ -39,7 +44,7 @@ public class ArticleController {
     }
 
     @GetMapping("/article/{some}")
-    public ResponseEntity<List<ArticleDTO>> getBySomeWord(@PathVariable String some) {
+    public ResponseEntity<List<ArticleDTO>> getBySomeWord(@Valid @PathVariable("some") @Size(min = 4, max = 255) String some) {
         return new ResponseEntity<List<ArticleDTO>>(articleService.findBySomeWord(some),
                                                 HttpStatus.OK);
     }

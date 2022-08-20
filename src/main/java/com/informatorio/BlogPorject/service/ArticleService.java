@@ -14,6 +14,8 @@ import com.informatorio.BlogPorject.converter.SourceConverter;
 import com.informatorio.BlogPorject.dto.ArticleDTO;
 import com.informatorio.BlogPorject.entity.ArticleEntity;
 import com.informatorio.BlogPorject.repository.ArticleRepository;
+import com.informatorio.BlogPorject.repository.AuthorRepository;
+import com.informatorio.BlogPorject.repository.SourceRepository;
 
 @Service
 public class ArticleService {
@@ -22,15 +24,17 @@ public class ArticleService {
     private ArticleConverter articleConverter;
     private SourceConverter sourceConverter;
     private AuthorConverter authorConverter;
-    //private SourceRepository sourceRepository;
+    private SourceRepository sourceRepository;
+    private AuthorRepository authorRepository;
 
     @Autowired
-    public ArticleService(ArticleRepository articleRepository, ArticleConverter articleConverter, SourceConverter sourceConverter, AuthorConverter authorConverter) {
+    public ArticleService(ArticleRepository articleRepository, ArticleConverter articleConverter, SourceConverter sourceConverter, AuthorConverter authorConverter, SourceRepository sourceRepository, AuthorRepository authorRepository) {
         this.articleRepository = articleRepository;
         this.articleConverter = articleConverter;
         this.sourceConverter = sourceConverter;
         this.authorConverter = authorConverter;
-        //this.sourceRepository = sourceRepository;
+        this.sourceRepository = sourceRepository;
+        this.authorRepository = authorRepository;
     }
 
     public ArticleDTO newArticle(ArticleDTO articleDTO) {
@@ -49,6 +53,7 @@ public class ArticleService {
 
     }
 
+    //Devuelve los articulos que tengan fecha de publicacion definida
     public List<ArticleDTO> getAllArticles() {
         List<ArticleEntity> entities = articleRepository.findAll();
         List<ArticleEntity> entitiesPublished = new ArrayList<>();
@@ -60,6 +65,7 @@ public class ArticleService {
         return articleConverter.toListDTO(entitiesPublished);
     }
 
+    //Devuelve los articulos borradores, no tiene fecha asignada de publicacion
     public List<ArticleDTO> getArticleDraft() {
         List<ArticleEntity> entities = articleRepository.findAll();
         List<ArticleEntity> entitiesDrafts = new ArrayList<>();
@@ -78,7 +84,7 @@ public class ArticleService {
             if (article.getTitle().toLowerCase().contains(word.toLowerCase()) 
                 || article.getDescription().toLowerCase().contains(word.toLowerCase())
                 || article.getContent().toLowerCase().contains(word.toLowerCase())
-                || article.getAuthor().getFullName().contains(word.toLowerCase())) {
+                || article.getAuthor().getFullName().toLowerCase().contains(word.toLowerCase())) {
                     entitiesFilter.add(article);
             }
         }
@@ -94,7 +100,20 @@ public class ArticleService {
         entity.setUrlToImage(articleDTO.getUrlToImage());
         entity.setPublishedAt(articleDTO.getPublishedAt());
         entity.setContent(articleDTO.getContent());
-        entity.setAuthor(authorConverter.authorDTOToEntity(articleDTO.getAuthor()));
+        if (authorRepository.findById(articleDTO.getAuthor().getId()).isPresent()) {
+            try {
+                entity.setAuthor(authorConverter.authorDTOToEntity(articleDTO.getAuthor()));
+            } catch (Exception e) {
+                throw new EntityNotFoundException(e.getMessage());
+            } 
+        }
+        if (sourceRepository.findById(articleDTO.getSourceDTO().getId()).isPresent()) {
+            try {
+                entity.setSource(sourceConverter.sourceDTOToEntity(articleDTO.getSourceDTO()));
+            } catch (Exception e) {
+                throw new EntityNotFoundException(e.getMessage());
+            } 
+        }
         entity.setSource(sourceConverter.sourceDTOToEntity(articleDTO.getSourceDTO()));
         entity = articleRepository.save(entity);
         return articleConverter.articleEntityToDTO(entity);

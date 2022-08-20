@@ -46,6 +46,7 @@ public class SourceService {
 
     public SourceDTO modifySource(Long id, SourceDTO sourceDTO) {
         SourceEntity entity = sourceRepository.findById(id).orElse(null);
+        entity.setId(sourceDTO.getId());
         entity.setName(sourceDTO.getName());
         entity.setCode(sourceDTO.getCode());
         entity.setCreatedAt(sourceDTO.getCreatedAt());

@@ -64,6 +64,7 @@ public class AuthorService {
 
     public AuthorDTO modifyAuthor(Long id, AuthorDTO authorDTO) {
         AuthorEntity entity = authorRepository.findById(id).orElse(null);
+        entity.setId(authorDTO.getId());
         entity.setFirstName(authorDTO.getFirstName());
         entity.setLastName(authorDTO.getLastName());
         entity.setFullName();
