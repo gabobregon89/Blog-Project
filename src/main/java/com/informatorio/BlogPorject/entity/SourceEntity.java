@@ -28,7 +28,7 @@ public class SourceEntity {
     private LocalDate createdAt;
 
     //@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @OneToMany(mappedBy = "source", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "source", cascade = {CascadeType.DETACH,CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ArticleEntity> articles = new ArrayList<>();
 
     //Constructors

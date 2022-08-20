@@ -25,7 +25,7 @@ public class AuthorEntity {
     private String fullName;
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.DETACH,CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ArticleEntity> articles = new ArrayList<>();
 
     //Constructors
@@ -40,7 +40,7 @@ public class AuthorEntity {
     public AuthorEntity(String firstName, String lastName, LocalDate createdAt) {
         this.firstName = firstName;
         this.lastName = lastName;
-        setFullName(fullName);
+        setFullName();
         this.createdAt = createdAt;
     }
 
@@ -57,6 +57,7 @@ public class AuthorEntity {
     }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+        setFullName();
     }
 
     public String getLastName() {
@@ -64,12 +65,13 @@ public class AuthorEntity {
     }
     public void setLastName(String lastName) {
         this.lastName = lastName;
+        setFullName();
     }
 
     public String getFullName() {
         return this.fullName;
     }
-    public void setFullName(String fullName) {
+    public void setFullName() {
         this.fullName = this.firstName + ' ' + this.lastName;
     }
 

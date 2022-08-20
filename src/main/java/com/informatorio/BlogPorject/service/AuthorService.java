@@ -66,7 +66,7 @@ public class AuthorService {
         AuthorEntity entity = authorRepository.findById(id).orElse(null);
         entity.setFirstName(authorDTO.getFirstName());
         entity.setLastName(authorDTO.getLastName());
-        entity.setFullName(authorDTO.getFullName());
+        entity.setFullName();
         entity.setCreatedAt(authorDTO.getCreatedAt());
         entity = authorRepository.save(entity);
         return authorConverter.authorEntityToDTO(entity);

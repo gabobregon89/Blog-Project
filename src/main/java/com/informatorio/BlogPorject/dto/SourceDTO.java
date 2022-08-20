@@ -53,10 +53,6 @@ public class SourceDTO {
         this.createdAt = createdAt;
     }
 
-    public List<ArticleDTO> getArticles() {
-        return this.articles;
-    }
-
     //Equals
     @Override
     public boolean equals(Object obj) {

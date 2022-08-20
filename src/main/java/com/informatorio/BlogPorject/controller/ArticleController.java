@@ -44,11 +44,11 @@ public class ArticleController {
                                                 HttpStatus.OK);
     }
 
-    /*@GetMapping("/authordate/{date}")
-    public ResponseEntity<List<ArticleDTO>> getByDate(@PathVariable String date) {
-        return new ResponseEntity<List<ArticleDTO>>(articleService.compareByDate(date),
+    @GetMapping("/articledraft")
+    public ResponseEntity<List<ArticleDTO>> getArticleDraft() {
+        return new ResponseEntity<List<ArticleDTO>>(articleService.getArticleDraft(),
                                                 HttpStatus.OK);
-    }*/
+    }
 
     @PutMapping("/article/{id}")
     public ResponseEntity<ArticleDTO> updateAuthor(@PathVariable Long id, @RequestBody ArticleDTO articleDTO) {
