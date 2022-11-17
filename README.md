@@ -1,3 +1,3 @@
 # Blog-Project
-Blog of news
+Blog of news - 
 Proyecto final del Informatorio Etapa 3
